@@ -57,16 +57,6 @@ class AIService:
             "tokens_used": len(prompt.split())
         }
 
-        # Run validation/sanitization using AIValidator before returning
-        try:
-            validator = AIValidator()
-            validation_report = await validator.validate(response)
-            # attach validation report alongside the AI response
-            response["validation"] = validation_report
-        except Exception:
-            # never fail the AI service if validator has an issue; return response without validation
-            response["validation"] = {"error": "validation_failed"}
-
         return response
     
     async def call_external_ai_api(self, endpoint: str, payload: dict) -> dict:
