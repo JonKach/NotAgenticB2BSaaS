@@ -59,7 +59,7 @@ class AIService:
 
         # Run validation/sanitization using AIValidator before returning
         try:
-            validator = AIValidator(api_key=self.api_key)
+            validator = AIValidator()
             validation_report = await validator.validate(response)
             # attach validation report alongside the AI response
             response["validation"] = validation_report
