@@ -16,10 +16,10 @@ const Footer = () => {
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
-              NotAgenticB2BSaaS
+              MedScribe
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Building the future of B2B solutions
+              AI-powered medical documentation
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -41,13 +41,13 @@ const Footer = () => {
               Contact
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Email: info@notagenticb2bsaas.com
+              Email: support@medscribe.app
             </Typography>
           </Grid>
         </Grid>
         <Box mt={3}>
           <Typography variant="body2" color="text.secondary" align="center">
-            © {new Date().getFullYear()} NotAgenticB2BSaaS. All rights reserved.
+            © {new Date().getFullYear()} MedScribe. All rights reserved.
           </Typography>
         </Box>
       </Container>

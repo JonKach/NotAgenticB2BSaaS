@@ -6,7 +6,7 @@ const NavBar = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          NotAgenticB2BSaaS
+          MedScribe
         </Typography>
         <Box>
           <Button color="inherit">Home</Button>

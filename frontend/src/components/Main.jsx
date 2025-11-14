@@ -7,13 +7,13 @@ const Main = () => {
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h2" component="h1" gutterBottom>
-            Welcome to NotAgenticB2BSaaS
+            Welcome to MedScribe
           </Typography>
           <Typography variant="h5" color="text.secondary" paragraph>
-            Your intelligent B2B SaaS solution for modern businesses
+            AI-powered medical documentation for clinicians
           </Typography>
           <Button variant="contained" size="large" sx={{ mt: 2 }}>
-            Get Started
+            Start Recording
           </Button>
         </Box>
 
@@ -22,10 +22,10 @@ const Main = () => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h2" gutterBottom>
-                  Feature One
+                  Record & Transcribe
                 </Typography>
                 <Typography color="text.secondary">
-                  Powerful tools to help your business grow and scale efficiently.
+                  Capture clinician-patient conversations with high-accuracy AI transcription.
                 </Typography>
               </CardContent>
             </Card>
@@ -34,10 +34,10 @@ const Main = () => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h2" gutterBottom>
-                  Feature Two
+                  AI-Generated EHR Notes
                 </Typography>
                 <Typography color="text.secondary">
-                  Advanced analytics and insights to make data-driven decisions.
+                  Structured, doctor-formatted notes with differential diagnoses and ICD-10 codes.
                 </Typography>
               </CardContent>
             </Card>
@@ -46,10 +46,10 @@ const Main = () => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h2" gutterBottom>
-                  Feature Three
+                  Download & Integrate
                 </Typography>
                 <Typography color="text.secondary">
-                  Seamless integration with your existing business processes.
+                  Clean, downloadable EHR-ready documents with accurate extractions.
                 </Typography>
               </CardContent>
             </Card>
