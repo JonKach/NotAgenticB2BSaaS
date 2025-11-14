@@ -12,6 +12,7 @@ import aiofiles
 
 
 import assemblyai as aai
+from .routers import clinical_router
 
 
 os.makedirs("uploads", exist_ok=True)
@@ -36,6 +37,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(ai_router.router, prefix="/api/ai", tags=["AI"])
+app.include_router(clinical_router.router, prefix="/api/clinical", tags=["Clinical"])
 
 
 @app.get("/")
