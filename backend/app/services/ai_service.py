@@ -2,6 +2,7 @@ import os
 from typing import Optional
 import httpx
 from dotenv import load_dotenv
+from .ai_validator import AIValidator
 
 load_dotenv()
 
@@ -50,11 +51,23 @@ class AIService:
         #     return response.json()
         
         # For now, return a mock response
-        return {
+        response = {
             "response": f"AI response to: {prompt[:50]}...",
             "model": "mock-model-v1",
             "tokens_used": len(prompt.split())
         }
+
+        # Run validation/sanitization using AIValidator before returning
+        try:
+            validator = AIValidator(api_key=self.api_key)
+            validation_report = await validator.validate(response)
+            # attach validation report alongside the AI response
+            response["validation"] = validation_report
+        except Exception:
+            # never fail the AI service if validator has an issue; return response without validation
+            response["validation"] = {"error": "validation_failed"}
+
+        return response
     
     async def call_external_ai_api(self, endpoint: str, payload: dict) -> dict:
         """
