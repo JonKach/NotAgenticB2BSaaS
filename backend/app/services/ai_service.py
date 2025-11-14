@@ -2,7 +2,6 @@ import os
 from typing import Optional
 import httpx
 from dotenv import load_dotenv
-from .ai_validator import AIValidator
 
 load_dotenv()
 
