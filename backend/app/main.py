@@ -19,7 +19,7 @@ class TranscriptPayload(BaseModel):
     transcript: str
 
 os.makedirs("uploads", exist_ok=True)
-genai.configure(api_key="AIzaSyB34b_kr7Cy9cic19q8YjbJ-QyRzyikqhM")
+genai.configure(api_key="REDACTED_FOR_PRIVACY")
 
 
 app = FastAPI(
@@ -80,7 +80,7 @@ async def process_audio(file: UploadFile = File(...)):
        await out_file.write(audio_bytes)
 
 
-   aai.settings.api_key = "590c01ff353e4117873acb850eab27e9"
+   aai.settings.api_key = "REDACTED_FOR_PRIVACY"
 
 
    # audio_file = "./local_file.mp3"
