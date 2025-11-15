@@ -4,18 +4,22 @@ from app.routers import ai_router
 from fastapi import HTTPException
 import httpx
 import os
+import google.generativeai as genai
 
-
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Body
 from fastapi.responses import JSONResponse
 import aiofiles
 
 
 import assemblyai as aai
 from .routers import clinical_router
+from pydantic import BaseModel
 
+class TranscriptPayload(BaseModel):
+    transcript: str
 
 os.makedirs("uploads", exist_ok=True)
+genai.configure(api_key="AIzaSyB34b_kr7Cy9cic19q8YjbJ-QyRzyikqhM")
 
 
 app = FastAPI(
@@ -54,49 +58,6 @@ async def health_check():
    return {"status": "healthy"}
 
 
-@app.post("/process-transcript")
-async def process_transcript(payload: str):
-   """
-   Accepts a transcript string in the JSON body, sends it to a placeholder AI API,
-   and returns the AI response.
-   """
-
-
-   transcript = payload
-
-
-   if not transcript.strip():
-       raise HTTPException(status_code=400, detail="Transcript cannot be empty.")
-
-
-   # Placeholder AI API endpoint (replace with real one)
-   AI_API_URL = "https://api.placeholder-ai.com/v1/generate"
-
-
-   # Example payload for the AI API
-   data = {
-       "model": "demo-model",
-       "input": transcript
-   }
-
-
-   try:
-       async with httpx.AsyncClient(timeout=30.0) as client:
-           ai_response = await client.post(AI_API_URL, json=data)
-
-
-       ai_response.raise_for_status()
-       ai_output = ai_response.json()
-
-
-   except httpx.HTTPError as e:
-       raise HTTPException(status_code=502, detail=f"AI API error: {str(e)}")
-
-
-   return {
-       "input_transcript": transcript,
-       "ai_output": ai_output
-   }
 
 
 @app.post("/process-audio")
@@ -144,3 +105,48 @@ async def process_audio(file: UploadFile = File(...)):
 
 
    return JSONResponse(content=result)
+
+@app.post("/process-transcript")
+async def process_transcript(text: str = Body(..., embed=False)):
+   
+    client = genai.GenerativeModel("gemini-2.5-flash")
+
+    prompt = '''
+    You are MedScribe-Reasoner, an AI clinical reasoning specialist. Your task is to take raw clinician–patient dialogue and produce accurate, formatted clinical note according to the doctor’s preferences.
+
+Do not hallucinate. Do not invent findings, diagnoses, medications, or values not supported by the transcript. If information is missing, explicitly mark it as missing.
+
+You will be given:
+- transcript: the raw transcribed dialogue
+
+
+Your tasks:
+
+1. Extract info from the transcript:
+
+2. Generate the final clinical note:
+   - Follow the requested note_format strictly.
+   - Apply doctor_preferences exactly.
+   - Map extracted content into the ehr_field_schema fields.
+   - The note must be polished, structured, and ready for inclusion in an EHR.
+
+3. Output the final result strictly as one report that describes the EHR: 
+
+
+No commentary outside the EHR. No extra text. Add "\n" new lines where appropriate for readability.
+--- INPUTS ---
+transcript: ${transcript}
+'''
+
+    response = client.generate_content(
+        prompt + f"transcript: {text}",
+    )   # Validate MIME type
+
+
+    print(response.text)
+    result = {
+        "response": response.text
+    }
+
+
+    return JSONResponse(content=result)

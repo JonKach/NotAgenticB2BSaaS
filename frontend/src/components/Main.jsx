@@ -26,6 +26,7 @@ const Main = () => {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const navigate = useNavigate();
+  const [textToDisplay, setTextToDisplay] = useState("Result will appear here.");
   const { record, setRecord, transcript: ctxTranscript, setTranscript, generateRecord } = useRecord();
 
   const handleSeePreview = async () => {
@@ -65,6 +66,25 @@ const Main = () => {
 
       const result = await response.json();
       console.log("Upload successful:", result);
+      try {
+        const response_from_gemini = await fetch(`${API_BASE}/process-transcript`, {
+          method: "POST",
+          // 2. Create the correct JSON payload and stringify it
+          body: result.message,
+        });
+
+        if (!response_from_gemini.ok) {
+          throw new Error(`Upload failed with status: ${response.status}`);
+        }
+        const result_from_gemini = await response_from_gemini.json();
+        setTextToDisplay(result_from_gemini.response);
+        console.log("Gemini processing successful:", result_from_gemini.response);
+      } catch (err) {
+        console.error("Error generating health record:", err);
+        setError("Failed to generate health record from transcript.");
+      } 
+      
+
       // Expect backend to return { transcript: "..." } or similar
       const transcriptText = result.transcript || result.transcription || result.text || "";
       if (transcriptText) {
@@ -151,7 +171,7 @@ const Main = () => {
       {/* Hero section with record button under header/subtitle */}
       <Box sx={{ textAlign: "center", mb: 6 }}>
         <Typography variant="h2" component="h1" gutterBottom>
-          MedScribe
+          MedScribe Psychiatry 
         </Typography>
         <Typography variant="h5" color="text.secondary" gutterBottom>
           Turn doctor–patient conversations into structured EHR-ready notes.
@@ -203,8 +223,7 @@ const Main = () => {
         </Box>
 
         <Typography variant="body1" color="text.secondary" sx={{ mt: 3 }}>
-          Record, transcribe, and auto-generate encounter notes with ICD-10
-          suggestions — in seconds, not hours.
+          {textToDisplay}
         </Typography>
       </Box>
 
