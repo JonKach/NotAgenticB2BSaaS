@@ -183,8 +183,9 @@ const Main = () => {
             variant="contained"
             size="large"
             onClick={handleRecordingToggle}
-            disabled={isUploading}ß
-            sx={{ mb: 1 }}
+            disabled={isUploading}
+            color={isRecording ? "error" : "primary"}
+            sx={{ mb: 1, bgcolor: isRecording ? "error.main" : undefined }}
           >
             {isUploading ? (
               <>
